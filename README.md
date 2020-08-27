@@ -14,6 +14,13 @@ Add the following lines to your `pom.xml` file.
     <groupId>com.exasol</groupId>
     <artifactId>artifact-reference-checker-maven-plugin</artifactId>
     <version>0.0.1</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>verify</goal>
+            </goals>
+        </execution>
+    </executions>
 </plugin> 
 ```
 
