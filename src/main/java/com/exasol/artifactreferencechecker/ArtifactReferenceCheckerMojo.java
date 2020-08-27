@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -19,11 +23,11 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -81,35 +85,72 @@ public class ArtifactReferenceCheckerMojo extends AbstractMojo {
 
     private boolean matchPatternInProjectFiles(String regex, String expected) throws MojoExecutionException {
         final Pattern pattern = Pattern.compile(regex);
-        String[] extensions = new String[] { "java", "md" };
         final File projectDirectory = project.getModel().getProjectDirectory();
-        final Collection<File> files = FileUtils.listFiles(projectDirectory, extensions, true);
-        boolean success = true;
-        for (File file : files) {
-            if (!matchPatternInFile(pattern, file, expected)) {
+        final FileValidationVisitor fileValidationVisitor = new FileValidationVisitor(getLog(), pattern, expected);
+        try {
+            Files.walkFileTree(projectDirectory.toPath(), fileValidationVisitor);
+        } catch (IOException exception) {
+            throw new MojoExecutionException("Could not check files. Cause: " + exception.getMessage(), exception);
+        }
+        return fileValidationVisitor.isSuccess();
+    }
+
+    /**
+     * File Visitor that checks of the files contain outdated artifact references
+     */
+    private static class FileValidationVisitor extends SimpleFileVisitor<Path> {
+        private final Log log;
+        private final Pattern pattern;
+        private final String expected;
+        List<String> extensions = List.of("java", "md");
+        private boolean success = true;
+
+        private FileValidationVisitor(Log log, Pattern pattern, String expected) {
+            this.log = log;
+            this.pattern = pattern;
+            this.expected = expected;
+        }
+
+        private boolean hasCorrectEnding(Path path) {
+            return extensions.stream().anyMatch(extension -> path.toString().endsWith("." + extension));
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            if (hasCorrectEnding(file)) {
+                validateFile(file);
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        private void validateFile(Path file) throws IOException {
+            try (Scanner fileScanner = new Scanner(file)) {
+                while (fileScanner.hasNextLine()) {
+                    String line = fileScanner.nextLine();
+                    validateLine(file, line);
+                }
+            } catch (FileNotFoundException exception) {
+                throw new IllegalStateException(
+                        "Could not open project file " + file.toString() + ". Cause: " + exception.getMessage(),
+                        exception);
+            }
+        }
+
+        private void validateLine(Path file, String line) {
+            final Matcher matcher = pattern.matcher(line);
+            if (matcher.find() && !matcher.group().equals(expected)) {
+                log.error("Found outdated artifact reference: " + matcher.group() + " in  " + file.toString());
                 success = false;
             }
         }
-        return success;
-    }
 
-    private boolean matchPatternInFile(Pattern pattern, File file, String expected) throws MojoExecutionException {
-        boolean success = true;
-        try (Scanner fileScanner = new Scanner(file)) {
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
-                final Matcher matcher = pattern.matcher(line);
-                if (matcher.find() && !matcher.group().equals(expected)) {
-                    getLog().error(
-                            "Found outdated artifact reference: " + matcher.group() + " in  " + file.getAbsolutePath());
-                    success = false;
-                }
-            }
+        /**
+         * Get if all files were valid.
+         * 
+         * @return true if all files were valid
+         */
+        public boolean isSuccess() {
             return success;
-        } catch (FileNotFoundException exception) {
-            throw new MojoExecutionException(
-                    "Could not open project file " + file.getAbsolutePath() + ". Cause: " + exception.getMessage(),
-                    exception);
         }
     }
 }

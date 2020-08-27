@@ -55,6 +55,8 @@ public class ArtifactReferenceCheckerMojoIT {
                         containsString("Detected artifact name:test-prefix-1.2.3-dynamodb-1.0.0.jar")),
                 () -> assertThat(result.getStdout(), containsString(
                         "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/invalid.md")),
+                () -> assertThat(result.getStdout(), containsString(
+                        "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/nested/nested_invalid.md")),
                 () -> assertThat(result.getStdout(), not(containsString("/valid.md")))//
         );
     }
