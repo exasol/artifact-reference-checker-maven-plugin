@@ -27,6 +27,11 @@ Add the following lines to your `pom.xml` file.
 ## Usage
 
 * Run checks manually: `mvn artifact-reference-checker:verify`
+
+##Information for Users
+
+* [Changelog](doc/changes/changelog.md)
+
 ## Dependencies
 
 ### Run Time Dependencies
