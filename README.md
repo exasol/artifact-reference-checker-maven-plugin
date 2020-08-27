@@ -3,7 +3,7 @@
 This [Maven-Plugin](https://maven.apache.org/plugins/index.html) helps you not to forget to change reference to your artifacts.
 For example if you reference your binary in the README.md file, this plugin will break the build, if you forgot to update the version number there.
 
-In addition this plugin can unify the versions for you.
+The plugin automatically extracts the naming schema of your artifact from the assembly plugin in the `pom.xml` file.
 
 ## Installation
 
@@ -26,9 +26,10 @@ Add the following lines to your `pom.xml` file.
 
 ## Usage
 
+* When you run `mvn verify` this plugin will run the checks 
 * Run checks manually: `mvn artifact-reference-checker:verify`
 
-##Information for Users
+## Information for Users
 
 * [Changelog](doc/changes/changelog.md)
 
