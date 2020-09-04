@@ -1,0 +1,40 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.apache.maven.plugin.my.unit</groupId>
+    <artifactId>project-to-test</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Test MyMojo</name>
+    <properties>
+        <my.property>1.2.3</my.property>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <finalName>test-prefix-${my.property}-dynamodb-${version}
+                    </finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.exasol</groupId>
+                <artifactId>artifact-reference-checker-maven-plugin</artifactId>
+                <version>0.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
