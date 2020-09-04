@@ -8,6 +8,10 @@
     <version>0.1.0</version>
 
     <name>Artifact reference checker and unifier</name>
+    <description>This Maven-Plugin helps you not to forget to change references to your artifacts. For example, if you
+        reference your binary in the README.md file, this plugin will break the build, if you forgot to update the
+        version number there.
+    </description>
     <url>https://github.com/exasol/artifact-reference-checker-maven-plugin</url>
 
     <licenses>
