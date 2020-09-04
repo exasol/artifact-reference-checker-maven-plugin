@@ -61,7 +61,8 @@ Add the following lines to your `pom.xml` file.
 | [Sonatype OSS Index Maven Plugin][sonatype-oss-index-maven-plugin]                  | Checking Dependencies Vulnerability                    | ASL2                             |
 | [Versions Maven Plugin][versions-maven-plugin]                                      | Checking if dependencies updates are available         | Apache License 2.0               |
 | [Maven Enforcer Plugin][maven-enforcer-plugin]                                      | Controlling environment constants                      | Apache License 2.0               |
-| [Maven Failsafe Plugin](https://maven.apache.org/surefire/maven-surefire-plugin/)   | Integration testing                                    | Apache License 2.0               |
+| [Maven Failsafe Plugin](https:/maven.apache.org/surefire/maven-surefire-plugin/)    | Integration testing                                    | Apache License 2.0               |
+| [Maven Compiler Plugin](https://maven.apache.org/plugins/maven-compiler-plugin/)    | Setting required Java version                          | Apache License 2.0               |
 
 [maven-project]: https://maven.apache.org/ref/3.5.0/apidocs/org/apache/maven/project/MavenProject.html
 [sonatype-oss-index-maven-plugin]: https://sonatype.github.io/ossindex-maven/maven-plugin/
