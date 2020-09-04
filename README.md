@@ -63,6 +63,9 @@ Add the following lines to your `pom.xml` file.
 | [Maven Enforcer Plugin][maven-enforcer-plugin]                                      | Controlling environment constants                      | Apache License 2.0               |
 | [Maven Failsafe Plugin](https:/maven.apache.org/surefire/maven-surefire-plugin/)    | Integration testing                                    | Apache License 2.0               |
 | [Maven Compiler Plugin](https://maven.apache.org/plugins/maven-compiler-plugin/)    | Setting required Java version                          | Apache License 2.0               |
+| [Maven Source Plugin](https://maven.apache.org/plugins/maven-source-plugin/)        | Creating a source code JAR                             | Apache License 2.0               |
+| [Maven Javadoc Plugin](https://maven.apache.org/plugins/maven-javadoc-plugin/)      | Creating a Javadoc JAR                                 | Apache License 2.0               |
+| [Maven GPG Plugin](https://maven.apache.org/plugins/maven-gpg-plugin/)              | Signs JARs                                             | Apache License 2.0               |
 
 [maven-project]: https://maven.apache.org/ref/3.5.0/apidocs/org/apache/maven/project/MavenProject.html
 [sonatype-oss-index-maven-plugin]: https://sonatype.github.io/ossindex-maven/maven-plugin/
