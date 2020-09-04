@@ -13,7 +13,7 @@ Add the following lines to your `pom.xml` file.
 <plugin>
     <groupId>com.exasol</groupId>
     <artifactId>artifact-reference-checker-maven-plugin</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <executions>
         <execution>
             <goals>

@@ -90,7 +90,7 @@ public class ArtifactReferenceCheckerMojo extends AbstractMojo {
         try {
             Files.walkFileTree(projectDirectory.toPath(), fileValidationVisitor);
         } catch (IOException exception) {
-            throw new MojoExecutionException("Could not check files. Cause: " + exception.getMessage(), exception);
+            throw new MojoExecutionException("Could not check files.", exception);
         }
         return fileValidationVisitor.isSuccess();
     }
@@ -130,9 +130,7 @@ public class ArtifactReferenceCheckerMojo extends AbstractMojo {
                     validateLine(file, line);
                 }
             } catch (FileNotFoundException exception) {
-                throw new IllegalStateException(
-                        "Could not open project file " + file.toString() + ". Cause: " + exception.getMessage(),
-                        exception);
+                throw new IllegalStateException("Could not open project file " + file.toString() + ".", exception);
             }
         }
 

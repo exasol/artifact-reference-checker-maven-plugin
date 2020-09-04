@@ -18,7 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 public class ArtifactReferenceCheckerMojoIT {
-    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.0.1.jar").toFile();
+    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.1.0.jar").toFile();
     private static final File PLUGIN_POM = Path.of("pom.xml").toFile();
     private static final File TEST_PROJECT = Path.of("src", "test", "resources", "unit", "test_project").toFile();
 
