@@ -1,4 +1,6 @@
-# Artifact Reference Checker Maven Plugin 0.1.0, released 2020-XX-XX
+# Artifact Reference Checker Maven Plugin 0.1.0, released 2020-09-04
+
+Code name: Initial implementation 
 
 ## Summary
 
