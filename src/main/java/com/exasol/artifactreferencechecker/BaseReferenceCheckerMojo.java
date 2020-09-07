@@ -101,6 +101,8 @@ public class BaseReferenceCheckerMojo {
             Files.walkFileTree(projectDirectory.toPath(), fileVisitor);
         } catch (final IOException exception) {
             throw new MojoExecutionException("Could not check files.", exception);
+        } catch (ExceptionWrapper exceptionWrapper) {
+            throw exceptionWrapper.getExecutionException();
         }
         fileVisitor.report();
     }
@@ -129,7 +131,11 @@ public class BaseReferenceCheckerMojo {
             if (hasCorrectEnding(file)) {
                 this.fileAndLineVisitor.visit(file);
                 readLines(file);
-                this.fileAndLineVisitor.leave(file);
+                try {
+                    this.fileAndLineVisitor.leave(file);
+                } catch (final MojoExecutionException exception) {
+                    throw new ExceptionWrapper(exception);
+                }
             }
             return FileVisitResult.CONTINUE;
         }
@@ -147,6 +153,18 @@ public class BaseReferenceCheckerMojo {
 
         private void report() throws MojoFailureException {
             this.fileAndLineVisitor.report();
+        }
+    }
+
+    private static class ExceptionWrapper extends RuntimeException {
+        private final MojoExecutionException executionException;
+
+        private ExceptionWrapper(final MojoExecutionException executionException) {
+            this.executionException = executionException;
+        }
+
+        private MojoExecutionException getExecutionException() {
+            return this.executionException;
         }
     }
 }

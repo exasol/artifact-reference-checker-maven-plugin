@@ -17,13 +17,12 @@ import org.apache.maven.project.MavenProject;
  * This class checks the artifacts references in a maven project.
  */
 @Mojo(name = "verify", defaultPhase = LifecyclePhase.VERIFY)
-public class ArtifactReferenceCheckerMojo extends AbstractMojo {
+public class ArtifactReferenceCheckerVerifyMojo extends AbstractMojo {
+    private final BaseReferenceCheckerMojo baseReferenceCheckerMojo;
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
 
-    private final BaseReferenceCheckerMojo baseReferenceCheckerMojo;
-
-    public ArtifactReferenceCheckerMojo() {
+    public ArtifactReferenceCheckerVerifyMojo() {
         super();
         this.baseReferenceCheckerMojo = new BaseReferenceCheckerMojo(new ValidationFileAndLineVisitor(getLog()),
                 getLog());

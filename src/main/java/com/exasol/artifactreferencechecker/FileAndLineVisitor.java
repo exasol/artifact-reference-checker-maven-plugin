@@ -3,6 +3,7 @@ package com.exasol.artifactreferencechecker;
 import java.nio.file.Path;
 import java.util.regex.Pattern;
 
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
@@ -11,7 +12,7 @@ import org.apache.maven.plugin.MojoFailureException;
 public interface FileAndLineVisitor {
     public void visit(Path file);
 
-    public void leave(Path file);
+    public void leave(Path file) throws MojoExecutionException;
 
     public void visitLine(String line, Pattern pattern, String expected);
 
