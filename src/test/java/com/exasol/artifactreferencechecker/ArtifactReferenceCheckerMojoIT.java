@@ -35,8 +35,8 @@ public class ArtifactReferenceCheckerMojoIT {
                 "--log-file", "/dev/stdout");
     }
 
-    private static void runWithCheck(String... command) throws IOException, InterruptedException {
-        ExecResult result = mvnContainer.execInContainer(command);
+    private static void runWithCheck(final String... command) throws IOException, InterruptedException {
+        final ExecResult result = mvnContainer.execInContainer(command);
         System.out.println(result.getStdout());
         System.out.println(result.getStderr());
         if (result.getExitCode() != 0) {
@@ -47,7 +47,8 @@ public class ArtifactReferenceCheckerMojoIT {
     @Test
     void testVerify() throws IOException, InterruptedException {
         runWithCheck("cp", "-r", "/test_project/", "/tmp/test_project");// copy to make it writeable
-        final ExecResult result = mvnContainer.execInContainer("mvn", "--batch-mode", "-f", "/tmp/test_project/pom.xml",
+        final ExecResult result = mvnContainer.execInContainer("mvn", "--batch-mode", "-e", "-f",
+                "/tmp/test_project/pom.xml",
                 "verify", "--log-file", "/dev/stdout", "--no-transfer-progress");
         assertAll(//
                 () -> assertThat(result.getExitCode(), not(is(0))),
@@ -59,5 +60,17 @@ public class ArtifactReferenceCheckerMojoIT {
                         "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/nested/nested_invalid.md")),
                 () -> assertThat(result.getStdout(), not(containsString("/valid.md")))//
         );
+    }
+
+    // @Test //TODO re-enable when implemented
+    void testUnify() throws IOException, InterruptedException {
+        runWithCheck("cp", "-r", "/test_project/", "/tmp/test_project");// copy to make it writeable
+        runWithCheck("mvn", "--batch-mode", "-f", "/tmp/test_project/pom.xml", "artifact-reference-checker:unify",
+                "--log-file", "/dev/stdout", "--no-transfer-progress");
+        final ExecResult result = mvnContainer.execInContainer("cat", "/tmp/test_project/nested/nested_invalid.md");
+        assertAll(//
+                () -> assertThat(result.getExitCode(), not(is(0))),
+                () -> assertThat(result.getStdout(), not(containsString("test-prefix-1.2.3-dynamodb-1.0.0.jar"))),
+                () -> assertThat(result.getStdout(), not(containsString("test-prefix-1.2.3-dynamodb-1.0.0.jar"))));
     }
 }
