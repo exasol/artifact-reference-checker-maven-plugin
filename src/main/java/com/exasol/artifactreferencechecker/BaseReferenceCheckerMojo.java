@@ -51,9 +51,9 @@ public class BaseReferenceCheckerMojo {
     }
 
     /**
-     * Iterate all files with correct file ending and their lines.
+     * Iterate all files with correct file extension and their lines.
      *
-     * @param project maven project (use to access the pom file)
+     * @param project maven project used to access the pom file
      * @throws MojoExecutionException if something goes wrong
      * @throws MojoFailureException   if {@link FileAndLineVisitor#report()} throws a {@link MojoFailureException}
      */
@@ -108,7 +108,7 @@ public class BaseReferenceCheckerMojo {
     }
 
     /**
-     * File Visitor that checks if the files have the correct ending.
+     * File Visitor that checks if the files have the correct extension.
      */
     private static class FileVisitor extends SimpleFileVisitor<Path> {
         private final FileAndLineVisitor fileAndLineVisitor;

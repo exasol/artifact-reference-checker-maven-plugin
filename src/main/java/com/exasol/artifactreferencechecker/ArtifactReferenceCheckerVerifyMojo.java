@@ -18,9 +18,10 @@ import org.apache.maven.project.MavenProject;
  */
 @Mojo(name = "verify", defaultPhase = LifecyclePhase.VERIFY)
 public class ArtifactReferenceCheckerVerifyMojo extends AbstractMojo {
-    private final BaseReferenceCheckerMojo baseReferenceCheckerMojo;
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
+    
+    private final BaseReferenceCheckerMojo baseReferenceCheckerMojo;
 
     public ArtifactReferenceCheckerVerifyMojo() {
         super();
@@ -66,7 +67,7 @@ public class ArtifactReferenceCheckerVerifyMojo extends AbstractMojo {
         public void report() throws MojoFailureException {
             if (!this.success) {
                 throw new MojoFailureException(
-                        "Found invalid artifact references (see previous errors). You can use mvn artifact-reference-checker:unify to fix them.");
+                        "Found invalid artifact references, please check the reported errors. You can use mvn artifact-reference-checker:unify to fix them.");
             }
         }
     }
