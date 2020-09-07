@@ -4,15 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -40,6 +38,9 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     MavenProject project;
 
+    @Parameter(property = "exclude")
+    private List<String> excludes;
+
     private final FileAndLineVisitor fileAndLineVisitor;
 
     /**
@@ -63,6 +64,8 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
         getLog().info("Detected artifact name:" + resolvedFinalName);
         final String searchPattern = buildSearchPattern();
         getLog().debug("Generated pattern: " + searchPattern);
+        getLog().info("Excluded files:");
+        this.excludes.forEach(getLog()::info);
         matchPatternInProjectFiles(searchPattern, resolvedFinalName);
     }
 
@@ -93,7 +96,11 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
             throws MojoExecutionException, MojoFailureException {
         final Pattern pattern = Pattern.compile(regex);
         final File projectDirectory = this.project.getModel().getProjectDirectory();
-        final FileVisitor fileVisitor = new FileVisitor(this.fileAndLineVisitor, pattern, expected);
+        final FileSystem fileSystem = FileSystems.getDefault();
+        final List<PathMatcher> excludeMatchers = this.excludes.stream()
+                .map(excludPattern -> buildGlob(excludPattern, projectDirectory)).map(fileSystem::getPathMatcher)
+                .collect(Collectors.toList());
+        final FileVisitor fileVisitor = new FileVisitor(this.fileAndLineVisitor, pattern, expected, excludeMatchers);
         try {
             Files.walkFileTree(projectDirectory.toPath(), fileVisitor);
         } catch (final IOException exception) {
@@ -104,6 +111,14 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
         fileVisitor.report();
     }
 
+    private String buildGlob(final String excludePattern, final File projectDir) {
+        if (excludePattern.startsWith("/")) {
+            return "glob:" + projectDir + excludePattern;
+        } else {
+            return "glob:**" + excludePattern;
+        }
+    }
+
     /**
      * File Visitor that checks if the files have the correct extension.
      */
@@ -112,11 +127,22 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
         private final Pattern pattern;
         private final String expected;
         List<String> extensions = List.of("java", "md");
+        final List<PathMatcher> excludeMatchers;
 
-        private FileVisitor(final FileAndLineVisitor fileAndLineVisitor, final Pattern pattern, final String expected) {
+        private FileVisitor(final FileAndLineVisitor fileAndLineVisitor, final Pattern pattern, final String expected,
+                final List<PathMatcher> excludeMatchers) {
             this.fileAndLineVisitor = fileAndLineVisitor;
             this.pattern = pattern;
             this.expected = expected;
+            this.excludeMatchers = excludeMatchers;
+        }
+
+        private boolean isFileIncluded(final Path path) {
+            return hasCorrectEnding(path) && !isFileExcluded(path);
+        }
+
+        private boolean isFileExcluded(final Path path) {
+            return this.excludeMatchers.stream().anyMatch(matcher -> matcher.matches(path));
         }
 
         private boolean hasCorrectEnding(final Path path) {
@@ -125,7 +151,7 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
 
         @Override
         public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-            if (hasCorrectEnding(file)) {
+            if (isFileIncluded(file)) {
                 this.fileAndLineVisitor.visit(file);
                 readLines(file);
                 try {

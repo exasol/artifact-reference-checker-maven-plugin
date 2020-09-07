@@ -1,0 +1,1 @@
+test-prefix-0.0.0-dynamodb-4.5.6.jar

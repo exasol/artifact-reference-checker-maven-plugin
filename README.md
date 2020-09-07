@@ -32,7 +32,7 @@ Add the following lines to your `pom.xml` file.
 <plugin>
     <groupId>com.exasol</groupId>
     <artifactId>artifact-reference-checker-maven-plugin</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <executions>
         <execution>
             <goals>
@@ -40,6 +40,9 @@ Add the following lines to your `pom.xml` file.
             </goals>
         </execution>
     </executions>
+    <configuration>
+        <!-- Add configuration here -->
+    </configuration>
 </plugin> 
 ```
 
@@ -48,6 +51,19 @@ Add the following lines to your `pom.xml` file.
 * When you run `mvn verify` this plugin will run the checks 
 * Run checks manually: `mvn artifact-reference-checker:verify`
 * Unify the versions using: `mvn artifact-reference-checker:unify`
+
+## Configuration
+
+* Exclude file:
+    You can exclude files from verification and unification.
+     
+     ```xml
+    <excludes>
+        <exclude>doc/changes/*</exclude>
+    </excludes>
+    ``` 
+  
+  If the path starts with a `/` it is relative to the projects root directory. Else it matches in all project folders.
 
 ## Information for Users
 
