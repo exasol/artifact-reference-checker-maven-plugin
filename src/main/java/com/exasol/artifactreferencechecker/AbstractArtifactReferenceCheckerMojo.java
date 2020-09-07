@@ -24,61 +24,58 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * This class contains the generic implementation for verify and unify.
+ * This class contains the abstract implementation for verify and unify.
  */
-public class BaseReferenceCheckerMojo {
+public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo {
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    MavenProject project;
+
     private final FileAndLineVisitor fileAndLineVisitor;
-    private final Log logger;
 
     /**
-     * Create a new instance of {@link BaseReferenceCheckerMojo}.
-     * 
-     * @param fileAndLineVisitor visit or unify specific behaviour
-     * @param logger             logger
+     * Create a new instance of {@link AbstractArtifactReferenceCheckerMojo}.
+     *
      */
-    public BaseReferenceCheckerMojo(final FileAndLineVisitor fileAndLineVisitor, final Log logger) {
-        this.fileAndLineVisitor = fileAndLineVisitor;
-        this.logger = logger;
+    public AbstractArtifactReferenceCheckerMojo() {
+        this.fileAndLineVisitor = getFileAndLineVisitor();
     }
 
-    /**
-     * Iterate all files with correct file extension and their lines.
-     *
-     * @param project maven project used to access the pom file
-     * @throws MojoExecutionException if something goes wrong
-     * @throws MojoFailureException   if {@link FileAndLineVisitor#report()} throws a {@link MojoFailureException}
-     */
-    public void execute(final MavenProject project) throws MojoExecutionException, MojoFailureException {
-        final List<Plugin> buildPlugins = project.getBuildPlugins();
+    protected abstract FileAndLineVisitor getFileAndLineVisitor();
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        final List<Plugin> buildPlugins = this.project.getBuildPlugins();
         final Plugin assemblyPlugin = buildPlugins.stream()
                 .filter(plugin -> plugin.getArtifactId().equals("maven-assembly-plugin")).findAny()
                 .orElseThrow(() -> new IllegalStateException("Could not find assembly plugin."));
         final Xpp3Dom config = (Xpp3Dom) assemblyPlugin.getConfiguration();
         final String resolvedFinalName = config.getChild("finalName").getValue() + ".jar";
-        this.logger.info("Detected artifact name:" + resolvedFinalName);
-        final String searchPattern = buildSearchPattern(project);
-        this.logger.debug("Generated pattern: " + searchPattern);
-        matchPatternInProjectFiles(project, searchPattern, resolvedFinalName);
+        getLog().info("Detected artifact name:" + resolvedFinalName);
+        final String searchPattern = buildSearchPattern();
+        getLog().debug("Generated pattern: " + searchPattern);
+        matchPatternInProjectFiles(searchPattern, resolvedFinalName);
     }
 
-    private String buildSearchPattern(final MavenProject project) {
-        final String finalName = getUnresolvedFinalName(project).trim() + ".jar";
+    private String buildSearchPattern() {
+        final String finalName = getUnresolvedFinalName().trim() + ".jar";
         final Pattern variablePattern = Pattern.compile("\\$\\{([^\\}]*)\\}");
         final Matcher matcher = variablePattern.matcher(finalName);
         return "\\Q" + matcher.replaceAll("\\\\E.*?\\\\Q") + "\\E";
     }
 
-    private String getUnresolvedFinalName(final MavenProject project) {
-        try (final FileInputStream fileIS = new FileInputStream(project.getModel().getPomFile().getAbsolutePath())) {
+    private String getUnresolvedFinalName() {
+        try (final FileInputStream fileIS = new FileInputStream(
+                this.project.getModel().getPomFile().getAbsolutePath())) {
             final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Compliant  
             builderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // compliant
@@ -92,16 +89,16 @@ public class BaseReferenceCheckerMojo {
         }
     }
 
-    private void matchPatternInProjectFiles(final MavenProject project, final String regex, final String expected)
+    private void matchPatternInProjectFiles(final String regex, final String expected)
             throws MojoExecutionException, MojoFailureException {
         final Pattern pattern = Pattern.compile(regex);
-        final File projectDirectory = project.getModel().getProjectDirectory();
+        final File projectDirectory = this.project.getModel().getProjectDirectory();
         final FileVisitor fileVisitor = new FileVisitor(this.fileAndLineVisitor, pattern, expected);
         try {
             Files.walkFileTree(projectDirectory.toPath(), fileVisitor);
         } catch (final IOException exception) {
             throw new MojoExecutionException("Could not check files.", exception);
-        } catch (ExceptionWrapper exceptionWrapper) {
+        } catch (final ExceptionWrapper exceptionWrapper) {
             throw exceptionWrapper.getExecutionException();
         }
         fileVisitor.report();
