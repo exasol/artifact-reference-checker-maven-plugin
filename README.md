@@ -22,6 +22,8 @@ For example if you reference your binary in the README.md file, this plugin will
 
 The plugin automatically extracts the naming schema of your artifact from the assembly plugin in the `pom.xml` file.
 
+In addition it can automatically adapt the references so that they refer to the current version.
+
 ## Installation
 
 Add the following lines to your `pom.xml` file.
@@ -45,6 +47,7 @@ Add the following lines to your `pom.xml` file.
 
 * When you run `mvn verify` this plugin will run the checks 
 * Run checks manually: `mvn artifact-reference-checker:verify`
+* Unify the versions using: `mvn artifact-reference-checker:unify`
 
 ## Information for Users
 
