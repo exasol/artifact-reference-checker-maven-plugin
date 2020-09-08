@@ -2,10 +2,6 @@
 
 Code name: Changes default phase to package
 
-## Summary
-
-Changes default phase to package
-
 ## Features / Enhancements
 
 * #12 Changes default phase to package
