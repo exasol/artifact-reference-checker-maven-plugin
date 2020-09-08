@@ -19,7 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 public class ArtifactReferenceCheckerMojoIT {
-    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.3.0.jar").toFile();
+    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.3.1.jar").toFile();
     private static final File PLUGIN_POM = Path.of("pom.xml").toFile();
     private static final File TEST_PROJECT = Path.of("src", "test", "resources", "unit", "test_project").toFile();
 
@@ -55,7 +55,7 @@ public class ArtifactReferenceCheckerMojoIT {
         runWithCheck("cp", "-r", "/test_project", "/tmp/test_project");// copy to make it writeable
         final ExecResult result = mvnContainer.execInContainer("mvn", "--batch-mode", "-e", "-f",
                 "/tmp/test_project/pom.xml",
-                "verify", "--log-file", "/dev/stdout", "--no-transfer-progress");
+                "package", "--log-file", "/dev/stdout", "--no-transfer-progress");
         assertAll(//
                 () -> assertThat(result.getExitCode(), not(is(0))),
                 () -> assertThat(result.getStdout(),

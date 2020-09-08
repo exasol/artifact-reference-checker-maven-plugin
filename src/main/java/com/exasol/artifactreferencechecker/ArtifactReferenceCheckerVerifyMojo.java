@@ -12,7 +12,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 /**
  * This class checks the artifacts references in a maven project.
  */
-@Mojo(name = "verify", defaultPhase = LifecyclePhase.VERIFY)
+@Mojo(name = "verify", defaultPhase = LifecyclePhase.PACKAGE)
 public class ArtifactReferenceCheckerVerifyMojo extends AbstractArtifactReferenceCheckerMojo {
 
     @Override
