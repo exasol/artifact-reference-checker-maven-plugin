@@ -6,31 +6,19 @@ import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 
 /**
  * This class unifies the artifacts references in a maven project.
  */
 @Mojo(name = "unify")
-public class ArtifactReferenceCheckerUnifyMojo extends AbstractMojo {
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
-    MavenProject project;
-
-    private final BaseReferenceCheckerMojo baseReferenceCheckerMojo;
-
-    public ArtifactReferenceCheckerUnifyMojo() {
-        super();
-        this.baseReferenceCheckerMojo = new BaseReferenceCheckerMojo(new UnifyFileAndLineVisitor(), getLog());
-    }
+public class ArtifactReferenceCheckerUnifyMojo extends AbstractArtifactReferenceCheckerMojo {
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        this.baseReferenceCheckerMojo.execute(this.project);
+    protected FileAndLineVisitor getFileAndLineVisitor() {
+        return new UnifyFileAndLineVisitor();
     }
 
     private static class UnifyFileAndLineVisitor implements FileAndLineVisitor {

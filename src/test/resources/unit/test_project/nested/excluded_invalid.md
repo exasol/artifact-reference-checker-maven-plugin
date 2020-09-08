@@ -1,0 +1,1 @@
+test-prefix-0.0.0-dynamodb-7.8.9.jar

@@ -4,34 +4,20 @@ import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 
 /**
  * This class checks the artifacts references in a maven project.
  */
 @Mojo(name = "verify", defaultPhase = LifecyclePhase.VERIFY)
-public class ArtifactReferenceCheckerVerifyMojo extends AbstractMojo {
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
-    MavenProject project;
-    
-    private final BaseReferenceCheckerMojo baseReferenceCheckerMojo;
-
-    public ArtifactReferenceCheckerVerifyMojo() {
-        super();
-        this.baseReferenceCheckerMojo = new BaseReferenceCheckerMojo(new ValidationFileAndLineVisitor(getLog()),
-                getLog());
-    }
+public class ArtifactReferenceCheckerVerifyMojo extends AbstractArtifactReferenceCheckerMojo {
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        this.baseReferenceCheckerMojo.execute(this.project);
+    protected FileAndLineVisitor getFileAndLineVisitor() {
+        return new ValidationFileAndLineVisitor(getLog());
     }
 
     private static class ValidationFileAndLineVisitor implements FileAndLineVisitor {

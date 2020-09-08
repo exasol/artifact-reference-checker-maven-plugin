@@ -19,7 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 public class ArtifactReferenceCheckerMojoIT {
-    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.2.0.jar").toFile();
+    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.3.0.jar").toFile();
     private static final File PLUGIN_POM = Path.of("pom.xml").toFile();
     private static final File TEST_PROJECT = Path.of("src", "test", "resources", "unit", "test_project").toFile();
 
@@ -64,19 +64,34 @@ public class ArtifactReferenceCheckerMojoIT {
                         "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/invalid.md")),
                 () -> assertThat(result.getStdout(), containsString(
                         "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/nested/nested_invalid.md")),
-                () -> assertThat(result.getStdout(), not(containsString("/valid.md")))//
+                () -> assertThat(result.getStdout(), not(containsString("/valid.md"))),
+                () -> assertThat(result.getStdout(), not(containsString("test-prefix-0.0.0-dynamodb-4.5.6.jar"))), // excluded
+                () -> assertThat(result.getStdout(), not(containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")))// excluded
         );
     }
 
     @Test
     void testUnify() throws IOException, InterruptedException {
-        runWithCheck("cp", "-r", "/test_project/", "/tmp/test_project");// copy to make it writeable
-        runWithCheck("mvn", "--batch-mode", "-f", "/tmp/test_project/pom.xml", "artifact-reference-checker:unify",
-                "--log-file", "/dev/stdout", "--no-transfer-progress");
+        runUnify();
         final ExecResult result = mvnContainer.execInContainer("cat", "/tmp/test_project/nested/nested_invalid.md");
         assertAll(//
                 () -> assertThat(result.getExitCode(), is(0)),
                 () -> assertThat(result.getStdout(), not(containsString("test-prefix-0.0.0-dynamodb-3.2.1.jar"))),
                 () -> assertThat(result.getStdout(), containsString("test-prefix-1.2.3-dynamodb-1.0.0.jar")));
+    }
+
+    @Test
+    void testUnifyDoesNotChangeExcluded() throws IOException, InterruptedException {
+        runUnify();
+        final ExecResult result = mvnContainer.execInContainer("cat", "/tmp/test_project/nested/excluded_invalid.md");
+        assertAll(//
+                () -> assertThat(result.getExitCode(), is(0)),
+                () -> assertThat(result.getStdout(), containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")));
+    }
+
+    private void runUnify() throws IOException, InterruptedException {
+        runWithCheck("cp", "-r", "/test_project/", "/tmp/test_project");// copy to make it writeable
+        runWithCheck("mvn", "--batch-mode", "-f", "/tmp/test_project/pom.xml", "artifact-reference-checker:unify",
+                "--log-file", "/dev/stdout", "--no-transfer-progress");
     }
 }
