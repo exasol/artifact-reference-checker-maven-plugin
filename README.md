@@ -63,7 +63,7 @@ Add the following lines to your `pom.xml` file.
     </excludes>
     ``` 
   
-  If the path starts with a `/` it is relative to the projects root directory. Else it matches in all project folders.
+  If the path starts with a `/` it is relative to the project's root directory. Otherwise, it acts as a pattern that can also exclude files in nested directories without specifying the whole path. For example `*.md`.
 
 ## Information for Users
 
