@@ -1,4 +1,4 @@
-# Artifact Reference Checker Maven Plugin 0.3.1, released 2020-09-08
+# Artifact Reference Checker Maven Plugin 0.3.1, released 2020-09-09
 
 Code name: Changes default phase to package
 
