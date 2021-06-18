@@ -1,4 +1,4 @@
-# Artifact reference checker and unifier 0.3.2, released 2021-??-??
+# Artifact reference checker and unifier 0.3.2, released 2021-06-21
 
 Code name: Maintenance
 
