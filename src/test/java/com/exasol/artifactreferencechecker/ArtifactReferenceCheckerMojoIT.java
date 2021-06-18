@@ -18,10 +18,10 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
 import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
-import com.exasol.mavenprojectversiongetter.ProjectVersionGetter;
+import com.exasol.mavenprojectversiongetter.MavenProjectVersionGetter;
 
 class ArtifactReferenceCheckerMojoIT {
-    private static final String CURRENT_VERSION = ProjectVersionGetter.getCurrentProjectVersion();
+    private static final String CURRENT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final File PLUGIN_JAR = Path
             .of("target", "artifact-reference-checker-maven-plugin-" + CURRENT_VERSION + ".jar").toFile();
     private static final File PLUGIN_POM = Path.of("pom.xml").toFile();
