@@ -1,97 +1,90 @@
 package com.exasol.artifactreferencechecker;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.BindMode;
-import org.testcontainers.containers.Container.ExecResult;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.apache.commons.io.FileUtils;
+import org.apache.maven.it.VerificationException;
+import org.apache.maven.it.Verifier;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 
-@Testcontainers
-public class ArtifactReferenceCheckerMojoIT {
-    private static final File PLUGIN = Path.of("target", "artifact-reference-checker-maven-plugin-0.3.1.jar").toFile();
+import com.exasol.mavenpluginintegrationtesting.MavenIntegrationTestEnvironment;
+import com.exasol.mavenprojectversiongetter.ProjectVersionGetter;
+
+class ArtifactReferenceCheckerMojoIT {
+    private static final String CURRENT_VERSION = ProjectVersionGetter.getCurrentProjectVersion();
+    private static final File PLUGIN_JAR = Path
+            .of("target", "artifact-reference-checker-maven-plugin-" + CURRENT_VERSION + ".jar").toFile();
     private static final File PLUGIN_POM = Path.of("pom.xml").toFile();
-    private static final File TEST_PROJECT = Path.of("src", "test", "resources", "unit", "test_project").toFile();
-
-    @Container
-    public static GenericContainer mvnContainer = new GenericContainer("maven:3.6.3-openjdk-11")
-            .withFileSystemBind(PLUGIN.getAbsolutePath(), "/tmp.jar", BindMode.READ_ONLY)
-            .withFileSystemBind(PLUGIN_POM.getAbsolutePath(), "/plugin_pom.xml", BindMode.READ_ONLY)
-            .withFileSystemBind(TEST_PROJECT.getAbsolutePath(), "/test_project", BindMode.READ_ONLY)
-            .withCommand("tail", "-f", "/dev/null");
+    private static final Path TEST_PROJECT = Path.of("src", "test", "resources", "unit", "test_project");
+    private static MavenIntegrationTestEnvironment testEnvironment;
+    @TempDir
+    Path tempDir;
+    private Verifier verifier;
 
     @BeforeAll
-    static void beforeAll() throws IOException, InterruptedException {
-        runWithCheck("mvn", "--batch-mode", "install:install-file", "-Dfile=/tmp.jar", "-DpomFile=/plugin_pom.xml",
-                "--log-file", "/dev/stdout");
+    static void beforeAll() {
+        testEnvironment = new MavenIntegrationTestEnvironment();
+        testEnvironment.installPlugin(PLUGIN_JAR, PLUGIN_POM);
     }
 
-    private static void runWithCheck(final String... command) throws IOException, InterruptedException {
-        final ExecResult result = mvnContainer.execInContainer(command);
-        System.out.println(result.getStdout());
-        System.out.println(result.getStderr());
-        if (result.getExitCode() != 0) {
-            throw new IllegalStateException("Command " + String.join(" ", command) + " failed");
-        }
+    @BeforeEach
+    void beforeEach() throws IOException {
+        FileUtils.copyDirectory(TEST_PROJECT.toFile(), this.tempDir.toFile());
+        writeCurrentVersionToPom();
+        this.verifier = testEnvironment.getVerifier(this.tempDir);
     }
 
-    @AfterEach
-    void after() throws IOException, InterruptedException {
-        runWithCheck("rm", "-rf", "/tmp/test_project");
+    private void writeCurrentVersionToPom() throws IOException {
+        final Path pom = this.tempDir.resolve("pom.xml");
+        final String pomTemplate = Files.readString(pom);
+        final String pomContent = pomTemplate.replace("CURRENT_VERSION", CURRENT_VERSION);
+        Files.writeString(pom, pomContent);
     }
 
     @Test
-    void testVerify() throws IOException, InterruptedException {
-        runWithCheck("cp", "-r", "/test_project", "/tmp/test_project");// copy to make it writeable
-        final ExecResult result = mvnContainer.execInContainer("mvn", "--batch-mode", "-e", "-f",
-                "/tmp/test_project/pom.xml",
-                "package", "--log-file", "/dev/stdout", "--no-transfer-progress");
+    void testVerify() {
+        final String message = assertThrows(VerificationException.class, () -> this.verifier.executeGoal("package"))
+                .getMessage();
         assertAll(//
-                () -> assertThat(result.getExitCode(), not(is(0))),
-                () -> assertThat(result.getStdout(),
+                () -> assertThat(message,
                         containsString("Detected artifact name:test-prefix-1.2.3-dynamodb-1.0.0.jar")),
-                () -> assertThat(result.getStdout(), containsString(
-                        "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/invalid.md")),
-                () -> assertThat(result.getStdout(), containsString(
-                        "Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  /tmp/test_project/nested/nested_invalid.md")),
-                () -> assertThat(result.getStdout(), not(containsString("/valid.md"))),
-                () -> assertThat(result.getStdout(), not(containsString("test-prefix-0.0.0-dynamodb-4.5.6.jar"))), // excluded
-                () -> assertThat(result.getStdout(), not(containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")))// excluded
+                () -> assertThat(message,
+                        containsString("Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  ")),
+                () -> assertThat(message,
+                        containsString("Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  ")),
+                () -> assertThat(message, not(containsString("/valid.md"))),
+                () -> assertThat(message, not(containsString("test-prefix-0.0.0-dynamodb-4.5.6.jar"))), // excluded
+                () -> assertThat(message, not(containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")))// excluded
         );
     }
 
     @Test
-    void testUnify() throws IOException, InterruptedException {
+    void testUnify() throws IOException, VerificationException {
         runUnify();
-        final ExecResult result = mvnContainer.execInContainer("cat", "/tmp/test_project/nested/nested_invalid.md");
+        final String fileContent = Files.readString(this.tempDir.resolve("nested/nested_invalid.md"));
         assertAll(//
-                () -> assertThat(result.getExitCode(), is(0)),
-                () -> assertThat(result.getStdout(), not(containsString("test-prefix-0.0.0-dynamodb-3.2.1.jar"))),
-                () -> assertThat(result.getStdout(), containsString("test-prefix-1.2.3-dynamodb-1.0.0.jar")));
+                () -> assertThat(fileContent, not(containsString("test-prefix-0.0.0-dynamodb-3.2.1.jar"))),
+                () -> assertThat(fileContent, containsString("test-prefix-1.2.3-dynamodb-1.0.0.jar")));
     }
 
     @Test
-    void testUnifyDoesNotChangeExcluded() throws IOException, InterruptedException {
+    void testUnifyDoesNotChangeExcluded() throws IOException, VerificationException {
         runUnify();
-        final ExecResult result = mvnContainer.execInContainer("cat", "/tmp/test_project/nested/excluded_invalid.md");
-        assertAll(//
-                () -> assertThat(result.getExitCode(), is(0)),
-                () -> assertThat(result.getStdout(), containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")));
+        final String fileContent = Files.readString(this.tempDir.resolve("nested/excluded_invalid.md"));
+        assertThat(fileContent, containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar"));
     }
 
-    private void runUnify() throws IOException, InterruptedException {
-        runWithCheck("cp", "-r", "/test_project/", "/tmp/test_project");// copy to make it writeable
-        runWithCheck("mvn", "--batch-mode", "-f", "/tmp/test_project/pom.xml", "artifact-reference-checker:unify",
-                "--log-file", "/dev/stdout", "--no-transfer-progress");
+    private void runUnify() throws VerificationException {
+        this.verifier.executeGoal("artifact-reference-checker:unify");
     }
 }
