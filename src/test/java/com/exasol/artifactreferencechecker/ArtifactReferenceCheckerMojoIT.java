@@ -45,9 +45,13 @@ class ArtifactReferenceCheckerMojoIT {
     }
 
     private void writeCurrentVersionToPom() throws IOException {
+        replaceInPom("CURRENT_VERSION", CURRENT_VERSION);
+    }
+
+    private void replaceInPom(final String search, final String replacement) throws IOException {
         final Path pom = this.tempDir.resolve("pom.xml");
         final String pomTemplate = Files.readString(pom);
-        final String pomContent = pomTemplate.replace("CURRENT_VERSION", CURRENT_VERSION);
+        final String pomContent = pomTemplate.replace(search, replacement);
         Files.writeString(pom, pomContent);
     }
 
@@ -66,6 +70,14 @@ class ArtifactReferenceCheckerMojoIT {
                 () -> assertThat(message, not(containsString("test-prefix-0.0.0-dynamodb-4.5.6.jar"))), // excluded
                 () -> assertThat(message, not(containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")))// excluded
         );
+    }
+
+    @Test
+    void testVerifyWithShadePlugin() throws IOException {
+        replaceInPom("maven-assembly-plugin", "maven-shade-plugin");
+        final String message = assertThrows(VerificationException.class, () -> this.verifier.executeGoal("package"))
+                .getMessage();
+        assertThat(message, containsString("Detected artifact name:test-prefix-1.2.3-dynamodb-1.0.0.jar"));
     }
 
     @Test

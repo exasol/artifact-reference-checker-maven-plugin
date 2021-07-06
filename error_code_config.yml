@@ -1,0 +1,4 @@
+error-tags:
+  ARCM:
+    packages:
+      - com.exasol.artifactreferencechecker
