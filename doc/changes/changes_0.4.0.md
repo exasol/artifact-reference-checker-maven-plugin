@@ -1,6 +1,6 @@
 # Artifact reference checker and unifier 0.4.0, released 2021-07-06
 
-Code name: Shade-plugin-support
+Code name: Shade Plugin Support
 
 ## Features
 
