@@ -11,6 +11,7 @@ Code name: Shade Plugin Support
 ### Compile Dependency Updates
 
 * Added `com.exasol:error-reporting-java:0.4.0`
+* Updated `org.apache.maven:maven-plugin-api:3.8.1` to `3.8.2`
 
 ### Runtime Dependency Updates
 
@@ -19,8 +20,9 @@ Code name: Shade Plugin Support
 ### Test Dependency Updates
 
 * Added `junit:junit:4.13.2`
+* Updated `org.slf4j:slf4j-jdk14:1.7.31` to `1.7.32`
 
 ### Plugin Dependency Updates
 
-* Updated `com.exasol:error-code-crawler-maven-plugin:0.1.1` to `0.5.0`
-* Updated `com.exasol:project-keeper-maven-plugin:0.7.3` to `0.9.0`
+* Updated `com.exasol:error-code-crawler-maven-plugin:0.1.1` to `0.5.1`
+* Updated `com.exasol:project-keeper-maven-plugin:0.7.3` to `0.10.0`

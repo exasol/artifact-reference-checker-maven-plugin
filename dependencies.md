@@ -69,6 +69,7 @@
 [54]: http://maven.apache.org/plugins/maven-dependency-plugin/
 [22]: https://maven.apache.org/plugins/maven-compiler-plugin/
 [38]: http://maven.apache.org/plugins/maven-gpg-plugin/
+[2]: https://maven.apache.org/ref/3.8.2/maven-plugin-api/
 [16]: http://junit.org
 [21]: https://www.eclipse.org/legal/epl-2.0/
 [17]: http://www.eclipse.org/legal/epl-v10.html
@@ -87,7 +88,6 @@
 [12]: http://www.slf4j.org
 [46]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [64]: http://maven.apache.org/plugins/maven-site-plugin/
-[2]: https://maven.apache.org/ref/3.8.1/maven-plugin-api/
 [58]: http://maven.apache.org/plugins/maven-resources-plugin/
 [0]: https://maven.apache.org/plugin-tools/maven-plugin-annotations
 [36]: https://maven.apache.org/plugins/maven-javadoc-plugin/
