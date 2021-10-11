@@ -5,7 +5,7 @@
     <groupId>com.exasol</groupId>
     <artifactId>artifact-reference-checker-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.4.0</version>
+    <version>0.4.1</version>
     <name>Artifact reference checker and unifier</name>
     <description>This Maven-Plugin helps you not to forget to change references to your artifacts. For example, if you
         reference your binary in the README.md file, this plugin will break the build, if you forgot to update the
@@ -43,9 +43,8 @@
         </developerConnection>
         <url>https://github.com/exasol/artifact-reference-checker-maven-plugin/tree/master</url>
     </scm>
-
     <properties>
-        <maven.version>3.8.1</maven.version>
+        <maven.version>3.8.2</maven.version>
         <junit.version>5.7.2</junit.version>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -96,7 +95,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
-            <version>1.7.31</version>
+            <version>1.7.32</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -271,7 +270,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>project-keeper-maven-plugin</artifactId>
-                <version>0.9.0</version>
+                <version>0.10.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -293,7 +292,7 @@
                 <version>3.0.0-M3</version>
                 <configuration>
                     <!-- Set the highest log level for coverage testing, so that we
-                      have a chance to reach branches in the logging lambdas too. -->
+                                have a chance to reach branches in the logging lambdas too. -->
                     <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties ${argLine}</argLine>
                     <excludes>
                         <exclude>**IT.java</exclude>
@@ -376,7 +375,7 @@
             <plugin>
                 <groupId>com.exasol</groupId>
                 <artifactId>error-code-crawler-maven-plugin</artifactId>
-                <version>0.5.0</version>
+                <version>0.5.1</version>
                 <executions>
                     <execution>
                         <goals>
