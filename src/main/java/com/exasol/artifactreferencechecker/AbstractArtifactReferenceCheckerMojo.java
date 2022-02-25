@@ -30,12 +30,16 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
 
     /**
      * Create a new instance of {@link AbstractArtifactReferenceCheckerMojo}.
-     *
      */
-    public AbstractArtifactReferenceCheckerMojo() {
+    protected AbstractArtifactReferenceCheckerMojo() {
         this.fileAndLineVisitor = getFileAndLineVisitor();
     }
 
+    /**
+     * Get the visitor for processing the files.
+     * 
+     * @return the visitor
+     */
     protected abstract FileAndLineVisitor getFileAndLineVisitor();
 
     @Override
