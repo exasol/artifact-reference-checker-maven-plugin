@@ -30,12 +30,16 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
 
     /**
      * Create a new instance of {@link AbstractArtifactReferenceCheckerMojo}.
-     *
      */
-    public AbstractArtifactReferenceCheckerMojo() {
+    protected AbstractArtifactReferenceCheckerMojo() {
         this.fileAndLineVisitor = getFileAndLineVisitor();
     }
 
+    /**
+     * Get the visitor for processing the files.
+     * 
+     * @return the visitor
+     */
     protected abstract FileAndLineVisitor getFileAndLineVisitor();
 
     @Override
@@ -145,6 +149,7 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
     }
 
     private static class ExceptionWrapper extends RuntimeException {
+        private static final long serialVersionUID = 2123268790118308800L;
         private final MojoExecutionException executionException;
 
         private ExceptionWrapper(final MojoExecutionException executionException) {

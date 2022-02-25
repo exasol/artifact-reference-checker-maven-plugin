@@ -2,3 +2,4 @@ error-tags:
   ARCM:
     packages:
       - com.exasol.artifactreferencechecker
+    highest-index: 7
