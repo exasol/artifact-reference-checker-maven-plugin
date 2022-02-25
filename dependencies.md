@@ -19,13 +19,8 @@
 | [SLF4J JDK14 Binding][12]              | [MIT License][13]                |
 | [Maven Plugin Integration Testing][14] | [MIT][7]                         |
 | [JUnit][16]                            | [Eclipse Public License 1.0][17] |
-| [maven-project-version-getter][18]     | [MIT][7]                         |
-
-## Runtime Dependencies
-
-| Dependency            | License                          |
-| --------------------- | -------------------------------- |
-| [JaCoCo :: Agent][20] | [Eclipse Public License 2.0][21] |
+| [Maven Project Version Getter][18]     | [MIT][7]                         |
+| [JaCoCo :: Agent][20]                  | [Eclipse Public License 2.0][21] |
 
 ## Plugin Dependencies
 
@@ -39,11 +34,11 @@
 | [Apache Maven Enforcer Plugin][32]                      | [Apache License, Version 2.0][1]              |
 | [Apache Maven Source Plugin][34]                        | [Apache License, Version 2.0][1]              |
 | [Apache Maven Javadoc Plugin][36]                       | [Apache License, Version 2.0][1]              |
-| [Apache Maven GPG Plugin][38]                           | [Apache License, Version 2.0][5]              |
+| [Apache Maven GPG Plugin][38]                           | [Apache License, Version 2.0][1]              |
 | [Project keeper maven plugin][40]                       | [MIT][7]                                      |
 | [Maven Surefire Plugin][42]                             | [Apache License, Version 2.0][1]              |
-| [JaCoCo :: Maven Plugin][20]                            | [Eclipse Public License 2.0][21]              |
-| [Maven Deploy Plugin][46]                               | [The Apache Software License, Version 2.0][5] |
+| [JaCoCo :: Maven Plugin][44]                            | [Eclipse Public License 2.0][21]              |
+| [Apache Maven Deploy Plugin][46]                        | [Apache License, Version 2.0][1]              |
 | [Nexus Staging Maven Plugin][48]                        | [Eclipse Public License][17]                  |
 | [error-code-crawler-maven-plugin][50]                   | [MIT][7]                                      |
 | [Reproducible Build Maven Plugin][52]                   | [Apache 2.0][5]                               |
@@ -68,11 +63,11 @@
 [28]: http://www.mojohaus.org/versions-maven-plugin/
 [54]: http://maven.apache.org/plugins/maven-dependency-plugin/
 [22]: https://maven.apache.org/plugins/maven-compiler-plugin/
-[38]: http://maven.apache.org/plugins/maven-gpg-plugin/
-[2]: https://maven.apache.org/ref/3.8.2/maven-plugin-api/
 [16]: http://junit.org
 [21]: https://www.eclipse.org/legal/epl-2.0/
+[46]: https://maven.apache.org/plugins/maven-deploy-plugin/
 [17]: http://www.eclipse.org/legal/epl-v10.html
+[44]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
 [52]: http://zlika.github.io/reproducible-build-maven-plugin
 [60]: http://maven.apache.org/plugins/maven-jar-plugin/
 [13]: http://www.opensource.org/licenses/mit-license.php
@@ -83,12 +78,13 @@
 [8]: https://junit.org/junit5/
 [30]: https://sonatype.github.io/ossindex-maven/maven-plugin/
 [24]: https://maven.apache.org/plugin-tools/maven-plugin-plugin
+[38]: https://maven.apache.org/plugins/maven-gpg-plugin/
 [14]: https://github.com/exasol/maven-plugin-integration-testing
 [34]: https://maven.apache.org/plugins/maven-source-plugin/
 [12]: http://www.slf4j.org
-[46]: http://maven.apache.org/plugins/maven-deploy-plugin/
 [64]: http://maven.apache.org/plugins/maven-site-plugin/
 [58]: http://maven.apache.org/plugins/maven-resources-plugin/
 [0]: https://maven.apache.org/plugin-tools/maven-plugin-annotations
 [36]: https://maven.apache.org/plugins/maven-javadoc-plugin/
 [50]: https://github.com/exasol/error-code-crawler-maven-plugin
+[2]: https://maven.apache.org/ref/3.8.4/maven-plugin-api/

@@ -145,6 +145,7 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
     }
 
     private static class ExceptionWrapper extends RuntimeException {
+        private static final long serialVersionUID = 2123268790118308800L;
         private final MojoExecutionException executionException;
 
         private ExceptionWrapper(final MojoExecutionException executionException) {
