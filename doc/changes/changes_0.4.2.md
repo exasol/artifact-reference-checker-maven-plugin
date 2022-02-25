@@ -10,7 +10,8 @@ Code name:
 ### Compile Dependency Updates
 
 * Updated `com.exasol:error-reporting-java:0.4.0` to `0.4.1`
-* Updated `org.apache.maven:maven-plugin-api:3.8.1` to `3.8.4`
+* Removed `org.apache.maven:maven-plugin-api:3.8.1`
+* Removed `org.apache.maven:maven-project:2.2.1`
 
 ### Runtime Dependency Updates
 
