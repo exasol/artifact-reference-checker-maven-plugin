@@ -18,7 +18,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <finalName>test-prefix-${my.property}-dynamodb-${version}
+                    <finalName>test-prefix-${my.property}-dynamodb-${project.version}
                     </finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>

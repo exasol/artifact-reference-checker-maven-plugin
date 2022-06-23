@@ -1,7 +1,7 @@
 # Artifact Reference Checker Maven Plugin
 
 [![Build Status](https://github.com/exasol/artifact-reference-checker-maven-plugin/actions/workflows/ci-build.yml/badge.svg)](https://github.com/exasol/artifact-reference-checker-maven-plugin/actions/workflows/ci-build.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/com.exasol/artifact-reference-checker-maven-plugin)](https://search.maven.org/artifact/com.exasol/artifact-reference-checker-maven-plugin)
+[![Maven Central – Artifact reference checker and unifier](https://img.shields.io/maven-central/v/com.exasol/artifact-reference-checker-maven-plugin)](https://search.maven.org/artifact/com.exasol/artifact-reference-checker-maven-plugin)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.exasol%3Aartifact-reference-checker-maven-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.exasol%3Aartifact-reference-checker-maven-plugin)
 
