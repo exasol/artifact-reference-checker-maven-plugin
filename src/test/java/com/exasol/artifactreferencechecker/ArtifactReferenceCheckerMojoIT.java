@@ -24,7 +24,7 @@ class ArtifactReferenceCheckerMojoIT {
     private static final String CURRENT_VERSION = MavenProjectVersionGetter.getCurrentProjectVersion();
     private static final File PLUGIN_JAR = Path
             .of("target", "artifact-reference-checker-maven-plugin-" + CURRENT_VERSION + ".jar").toFile();
-    private static final File PLUGIN_POM = Path.of("pom.xml").toFile();
+    private static final File PLUGIN_POM = Path.of(".flattened-pom.xml").toFile();
     private static final Path TEST_PROJECT = Path.of("src", "test", "resources", "unit", "test_project");
     private static MavenIntegrationTestEnvironment testEnvironment;
     @TempDir
