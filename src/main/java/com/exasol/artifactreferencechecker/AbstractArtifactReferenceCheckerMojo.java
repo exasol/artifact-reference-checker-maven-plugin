@@ -45,18 +45,18 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         final JarNameDetector.JarName jarName = new JarNameDetector().getJarName(this.project);
-        getLog().info("Detected artifact name:" + jarName.getResolved());
+        getLog().info("Detected artifact name: '" + jarName.getResolved() + "'");
         final String searchPattern = buildSearchPattern(jarName.getUnresolved());
-        getLog().debug("Generated pattern: " + searchPattern);
+        getLog().info("Generated pattern: " + searchPattern);
         getLog().info("Excluded files:");
         this.excludes.forEach(getLog()::info);
         matchPatternInProjectFiles(searchPattern, jarName.getResolved());
     }
 
     private String buildSearchPattern(final String unresolvedJarName) {
-        final Pattern variablePattern = Pattern.compile("\\$\\{([^\\}]*)\\}");
+        final Pattern variablePattern = Pattern.compile("\\$\\{([^}]*)\\}");
         final Matcher matcher = variablePattern.matcher(unresolvedJarName);
-        return "\\Q" + matcher.replaceAll("\\\\E.*?\\\\Q") + "\\E";
+        return "\\Q" + matcher.replaceAll("\\\\E[-A-Za-z0-9_.]*?\\\\Q") + "\\E";
     }
 
     private void matchPatternInProjectFiles(final String regex, final String expected)

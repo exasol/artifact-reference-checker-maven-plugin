@@ -44,7 +44,7 @@ public class ArtifactReferenceCheckerVerifyMojo extends AbstractArtifactReferenc
             final Matcher matcher = pattern.matcher(line);
             if (matcher.find() && !matcher.group().equals(expected)) {
                 this.log.error(
-                        "Found outdated artifact reference: " + matcher.group() + " in  " + this.currentFileName);
+                        "Found outdated artifact reference: '" + matcher.group() + "' in " + this.currentFileName);
                 this.success = false;
             }
         }

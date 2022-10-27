@@ -1,1 +1,1 @@
-test-prefix-0.0.0-dynamodb-4.5.6.jar
+prefix-propval-middle-project-under-test--4.5.6.jar
