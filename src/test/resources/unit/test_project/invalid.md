@@ -16,4 +16,4 @@ This line has a changed property value in "prefix-different_value-middle-project
 
 For instance, `s3://prefix/some/other/path/elements/prefix-foo-middle-project-under-test-0.0.1.jar`.
 
-Not that we intentionally used the same prefix twice in the path above.
+Note that we intentionally used the same prefix twice in the path above.

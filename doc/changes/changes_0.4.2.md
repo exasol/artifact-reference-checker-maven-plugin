@@ -8,7 +8,7 @@ Release 0.4.2 fixes situations where the artifact has a prefix. Before the fix i
 
 Instead of looking for any matching characters in variable replacements, only letters, numbers, dash, underscore and dot are accepted now. This resolves situations where words with any kind of separators (spaces, slashes, commas, etc.) were interpreted as part of the artifact name.
 
-Note that due to the nature of the replacement mechanism, you can still construct situations in which prefixes are mistakenly changed, but they should not appear but that only happens if you have repetitions in the actual artifact name, which is very unlikely.
+Note that due to the nature of the replacement mechanism, you can still construct situations in which prefixes are mistakenly changed, but that only happens if you have repetitions in the actual artifact name, which is very unlikely.
 
 ## Bugfixes
 
