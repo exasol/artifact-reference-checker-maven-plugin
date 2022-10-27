@@ -60,15 +60,17 @@ class ArtifactReferenceCheckerMojoIT {
         final String message = assertThrows(VerificationException.class, () -> this.verifier.executeGoal("package"))
                 .getMessage();
         assertAll(//
+                () -> assertThat(message, containsString("Detected artifact name: "
+                        + "'prefix-propval-middle-project-under-test-1.3.3.7.jar'")),
+                () -> assertThat(message, containsString("Found outdated artifact reference: "
+                        + "'prefix-propval-middle-project-under-test-0.0.1.jar' in ")),
                 () -> assertThat(message,
-                        containsString("Detected artifact name:test-prefix-1.2.3-dynamodb-1.0.0.jar")),
-                () -> assertThat(message,
-                        containsString("Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  ")),
-                () -> assertThat(message,
-                        containsString("Found outdated artifact reference: test-prefix-0.0.0-dynamodb-3.2.1.jar in  ")),
+                        containsString("Found outdated artifact reference: "
+                                + "'prefix-different_value-middle-project-under-test-1.3.3.7.jar' in ")),
                 () -> assertThat(message, not(containsString("/valid.md"))),
-                () -> assertThat(message, not(containsString("test-prefix-0.0.0-dynamodb-4.5.6.jar"))), // excluded
-                () -> assertThat(message, not(containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar")))// excluded
+                // The following files are excluded, so the contained references must not appear.
+                () -> assertThat(message, not(containsString("prefix-propval-middle-project-under-test-4.5.6.jar"))),
+                () -> assertThat(message, not(containsString("prefix-propval-middle-project-under-test--7.8.9.jar")))
         );
     }
 
@@ -77,7 +79,8 @@ class ArtifactReferenceCheckerMojoIT {
         replaceInPom("maven-assembly-plugin", "maven-shade-plugin");
         final String message = assertThrows(VerificationException.class, () -> this.verifier.executeGoal("package"))
                 .getMessage();
-        assertThat(message, containsString("Detected artifact name:test-prefix-1.2.3-dynamodb-1.0.0.jar"));
+        assertThat(message, containsString("Detected artifact name: "
+                + "'prefix-propval-middle-project-under-test-1.3.3.7.jar'"));
     }
 
     @Test
@@ -86,14 +89,23 @@ class ArtifactReferenceCheckerMojoIT {
         final String fileContent = Files.readString(this.tempDir.resolve("nested/nested_invalid.md"));
         assertAll(//
                 () -> assertThat(fileContent, not(containsString("test-prefix-0.0.0-dynamodb-3.2.1.jar"))),
-                () -> assertThat(fileContent, containsString("test-prefix-1.2.3-dynamodb-1.0.0.jar")));
+                () -> assertThat(fileContent, containsString("prefix-propval-middle-project-under-test-1.3.3.7.jar")));
+    }
+
+    @Test
+    void testUnifyLeavesSurroundingTextIntact() throws  IOException, VerificationException {
+        runUnify();
+        final String fileContent = Files.readString(this.tempDir.resolve("invalid.md"));
+        assertAll(//
+                () -> assertThat(fileContent, containsString("For instance, `s3://prefix/some/other/path/elements/"
+                        + "prefix-propval-middle-project-under-test-1.3.3.7.jar`.")));
     }
 
     @Test
     void testUnifyDoesNotChangeExcluded() throws IOException, VerificationException {
         runUnify();
         final String fileContent = Files.readString(this.tempDir.resolve("nested/excluded_invalid.md"));
-        assertThat(fileContent, containsString("test-prefix-0.0.0-dynamodb-7.8.9.jar"));
+        assertThat(fileContent, containsString("prefix-propval-middle-project-under-test--7.8.9.jar"));
     }
 
     private void runUnify() throws VerificationException {

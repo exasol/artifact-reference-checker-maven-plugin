@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.maven.plugin.my.unit</groupId>
-    <artifactId>project-to-test</artifactId>
-    <version>1.0.0</version>
+    <artifactId>project-under-test</artifactId>
+    <version>1.3.3.7</version>
     <packaging>jar</packaging>
     <name>Test MyMojo</name>
     <properties>
-        <my.property>1.2.3</my.property>
+        <my.property>propval</my.property>
     </properties>
 
     <build>
@@ -18,7 +18,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <finalName>test-prefix-${my.property}-dynamodb-${project.version}
+                    <finalName>prefix-${my.property}-middle-${project.artifactId}-${project.version}
                     </finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>

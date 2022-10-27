@@ -1,9 +1,9 @@
-Upload test-prefix-1.2.3-dynamodb-1.0.0.jar to your server.
+Upload prefix-propval-middle-project-under-test-1.3.3.7.jar to your server.
 
 ## Multiple Occurrences in a Line 
 
-test-prefix-1.2.3-dynamodb-1.0.0.jar and test-prefix-1.2.3-dynamodb-1.0.0.jar
+prefix-propval-middle-project-under-test-1.3.3.7.jar and prefix-propval-middle-project-under-test-1.3.3.7.jar
 
 ## With Path
 
-/test/test-prefix-1.2.3-dynamodb-1.0.0.jar 
+/prefix/test/prefix-propval-middle-project-under-test-1.3.3.7.jar

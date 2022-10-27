@@ -40,10 +40,11 @@ class JarNameDetector {
             }
         }
         throw new IllegalStateException(ExaError.messageBuilder("E-ARCM-5").message(
-                "The project configured non of the following jar-building plugins: {{supported plugins}}. Other methods of building a jar file are currently not supported.",
+                "The project configured non of the following jar-building plugins: {{supported plugins}}. "
+                        + "Other methods of building a jar file are currently not supported.",
                 JAR_BUILDING_PLUGINS).mitigation("Please check your project's configuration")
-                .mitigation(
-                        "Open a ticket at the artifact-reference-checker-maven-plugin to add support for different jar-building plugins.")
+                .mitigation("Open a ticket at the artifact-reference-checker-maven-plugin "
+                        + " to add support for different jar-building plugins.")
                 .toString());
     }
 
