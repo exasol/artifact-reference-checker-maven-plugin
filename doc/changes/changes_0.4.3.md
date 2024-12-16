@@ -1,12 +1,14 @@
-# Artifact reference checker and unifier 0.4.3, released 2024-??-??
+# Artifact reference checker and unifier 0.4.3, released 2024-12-16
 
-Code name:
+Code name: Fix CVE-2024-47554 in commons-io:commons-io:jar:2.11.0:test
 
 ## Summary
 
-## Features
+This release updates dependencies to fix CVE-2024-47554 in `commons-io:commons-io:jar:2.11.0:test`.
 
-* ISSUE_NUMBER: description
+## Security
+
+* #28: Fixed CVE-2024-47554 in `commons-io:commons-io:jar:2.11.0:test`
 
 ## Dependency Updates
 
