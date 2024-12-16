@@ -52,7 +52,7 @@
 
 [0]: https://maven.apache.org/plugin-tools/maven-plugin-annotations
 [1]: https://www.apache.org/licenses/LICENSE-2.0.txt
-[2]: https://maven.apache.org/ref/3.9.9/maven-plugin-api/
+[2]: https://maven.apache.org/ref/3.9.6/maven-plugin-api/
 [3]: http://maven.apache.org/
 [4]: http://www.apache.org/licenses/LICENSE-2.0.txt
 [5]: https://github.com/exasol/error-reporting-java/
