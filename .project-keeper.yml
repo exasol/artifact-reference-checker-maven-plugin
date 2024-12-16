@@ -4,4 +4,3 @@ sources:
     modules:
       - maven_central
       - integration_tests
-      - udf_coverage

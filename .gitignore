@@ -35,3 +35,5 @@ pom.xml.versionsBackup
 *.md.html
 *.flattened-pom.xml
 
+/.apt_generated/
+.settings/org.eclipse.jdt.apt.core.prefs
