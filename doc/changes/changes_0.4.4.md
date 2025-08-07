@@ -1,4 +1,4 @@
-# Artifact Reference Checker and Unifier 0.4.4, released 2025-08-01
+# Artifact Reference Checker and Unifier 0.4.4, released 2025-08-07
 
 Code name: Fixes for vulnerability CVE-2025-48924
 
