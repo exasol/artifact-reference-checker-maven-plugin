@@ -14,6 +14,12 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "verify", defaultPhase = LifecyclePhase.PACKAGE)
 public class ArtifactReferenceCheckerVerifyMojo extends AbstractArtifactReferenceCheckerMojo {
+    /**
+     * Create a new instance of a {@link ArtifactReferenceCheckerVerifyMojo}.
+     */
+    public ArtifactReferenceCheckerVerifyMojo() {
+        super();
+    }
 
     @Override
     protected FileAndLineVisitor getFileAndLineVisitor() {
