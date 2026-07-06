@@ -4,3 +4,4 @@ sources:
     modules:
       - maven_central
       - integration_tests
+      - udf_coverage # works for our Maven plugin integration tests too (even if there is no UDF in this project).
