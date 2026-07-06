@@ -130,6 +130,17 @@
                 <version>2.1.0</version>
             </plugin>
             <plugin>
+                <groupId>org.sonatype.ossindex.maven</groupId>
+                <artifactId>ossindex-maven-plugin</artifactId>
+                <configuration>
+                    <excludeVulnerabilityIds>
+                        <!-- org.apache.maven:maven-artifact-manager:2.2.1: CWE-346: Origin Validation Error (9.1); https://ossindex.sonatype.org/vulnerability/CVE-2021-26291
+                        Excluded because this is a provided dependency and not included in the product. -->
+                        <exclude>CVE-2021-26291</exclude>
+                    </excludeVulnerabilityIds>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.basepom.maven</groupId>
                 <artifactId>duplicate-finder-maven-plugin</artifactId>
                 <configuration>
