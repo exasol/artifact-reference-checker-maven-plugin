@@ -21,8 +21,8 @@ We raised the code coverage to meet Exasol's quality gate for Java projects and 
 * Updated `com.exasol:maven-plugin-integration-testing:1.1.3` to `1.1.5`
 * Updated `com.exasol:maven-project-version-getter:1.2.1` to `1.2.2`
 * Added `org.jacoco:org.jacoco.agent:0.8.15`
-* Updated `org.junit.jupiter:junit-jupiter-api:5.11.3` to `5.14.4`
-* Updated `org.junit.jupiter:junit-jupiter-params:5.11.3` to `5.14.4`
+* Updated `org.junit.jupiter:junit-jupiter-api:5.11.3` to `6.1.1`
+* Removed `org.junit.jupiter:junit-jupiter-params:5.11.3`
 * Updated `org.slf4j:slf4j-jdk14:2.0.16` to `2.0.18`
 
 ### Plugin Dependency Updates

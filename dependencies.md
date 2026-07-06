@@ -15,7 +15,6 @@
 | Dependency                             | License                          |
 | -------------------------------------- | -------------------------------- |
 | [JUnit Jupiter API][7]                 | [Eclipse Public License v2.0][8] |
-| [JUnit Jupiter Params][7]              | [Eclipse Public License v2.0][8] |
 | [SLF4J JDK14 Provider][9]              | [MIT][10]                        |
 | [Maven Plugin Integration Testing][11] | [MIT License][12]                |
 | [Maven Project Version Getter][13]     | [MIT License][14]                |
