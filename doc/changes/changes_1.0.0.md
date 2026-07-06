@@ -34,7 +34,7 @@ We raised the code coverage to meet Exasol's quality gate for Java projects and 
 * Updated `org.apache.maven.plugins:maven-artifact-plugin:3.6.0` to `3.6.1`
 * Updated `org.apache.maven.plugins:maven-clean-plugin:3.4.1` to `3.5.0`
 * Updated `org.apache.maven.plugins:maven-compiler-plugin:3.14.0` to `3.15.0`
-* Added `org.apache.maven.plugins:maven-dependency-plugin:3.3.0`
+* Added `org.apache.maven.plugins:maven-dependency-plugin:3.11.0`
 * Updated `org.apache.maven.plugins:maven-enforcer-plugin:3.5.0` to `3.6.3`
 * Updated `org.apache.maven.plugins:maven-failsafe-plugin:3.5.3` to `3.5.6`
 * Updated `org.apache.maven.plugins:maven-gpg-plugin:3.2.7` to `3.2.8`

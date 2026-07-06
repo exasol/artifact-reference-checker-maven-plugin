@@ -41,10 +41,10 @@
 | [Build Helper Maven Plugin][33]                         | [The MIT License][34]                         |
 | [Apache Maven GPG Plugin][35]                           | [Apache-2.0][1]                               |
 | [Central Publishing Maven Plugin][36]                   | [The Apache License, Version 2.0][1]          |
-| [Maven Failsafe Plugin][37]                             | [Apache-2.0][1]                               |
-| [JaCoCo :: Maven Plugin][38]                            | [EPL-2.0][16]                                 |
-| [Maven Plugin Plugin][39]                               | [Apache-2.0][1]                               |
-| [Apache Maven Dependency Plugin][40]                    | [Apache License, Version 2.0][1]              |
+| [Apache Maven Dependency Plugin][37]                    | [Apache-2.0][1]                               |
+| [Maven Failsafe Plugin][38]                             | [Apache-2.0][1]                               |
+| [JaCoCo :: Maven Plugin][39]                            | [EPL-2.0][16]                                 |
+| [Maven Plugin Plugin][40]                               | [Apache-2.0][1]                               |
 | [Project Keeper Maven plugin][41]                       | [The MIT License][42]                         |
 | [error-code-crawler-maven-plugin][43]                   | [MIT License][44]                             |
 | [Git Commit Id Maven Plugin][45]                        | [GNU Lesser General Public License 3.0][46]   |
@@ -90,10 +90,10 @@
 [34]: https://spdx.org/licenses/MIT.txt
 [35]: https://maven.apache.org/plugins/maven-gpg-plugin/
 [36]: https://central.sonatype.org
-[37]: https://maven.apache.org/surefire/maven-failsafe-plugin/
-[38]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
-[39]: https://maven.apache.org/plugin-tools/maven-plugin-plugin
-[40]: https://maven.apache.org/plugins/maven-dependency-plugin/
+[37]: https://maven.apache.org/plugins/maven-dependency-plugin/
+[38]: https://maven.apache.org/surefire/maven-failsafe-plugin/
+[39]: https://www.jacoco.org/jacoco/trunk/doc/maven.html
+[40]: https://maven.apache.org/plugin-tools/maven-plugin-plugin
 [41]: https://github.com/exasol/project-keeper/
 [42]: https://github.com/exasol/project-keeper/blob/main/LICENSE
 [43]: https://github.com/exasol/error-code-crawler-maven-plugin/
