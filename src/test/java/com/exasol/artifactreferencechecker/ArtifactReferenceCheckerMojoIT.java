@@ -116,16 +116,13 @@ class ArtifactReferenceCheckerMojoIT {
     @Test
     void testUnifyFailsIfFileCannotBeModified() {
         final Path readOnlyFile = this.tempDir.resolve("nested/nested_invalid.md");
-        if(readOnlyFile.toFile().setWritable(false)) {
-            final String message = assertThrows(VerificationException.class, this::runUnify).getMessage();
-            assertAll(//
-                    () -> assertThat(message, containsString("Could not modify file")),
-                    () -> assertThat(message, containsString(readOnlyFile.toString())));
-        }
-        else
-        {
+        if(!readOnlyFile.toFile().setWritable(false)) {
             throw new AssertionError("Unable to create read only file required for triggering exception.");
         }
+        final String message = assertThrows(VerificationException.class, this::runUnify).getMessage();
+        assertAll(//
+                () -> assertThat(message, containsString("Could not modify file")),
+                () -> assertThat(message, containsString(readOnlyFile.toString())));
     }
 
     private void runUnify() throws VerificationException {
