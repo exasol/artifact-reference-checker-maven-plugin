@@ -3,8 +3,7 @@ package com.exasol.artifactreferencechecker;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,6 +80,12 @@ class ArtifactReferenceCheckerMojoIT {
                 .getMessage();
         assertThat(message, containsString("Detected artifact name: "
                 + "'prefix-propval-middle-project-under-test-1.3.3.7.jar'"));
+    }
+
+    @Test
+    void testVerifySucceedsAfterUnify() throws VerificationException {
+        runUnify();
+        assertDoesNotThrow(() -> this.verifier.executeGoal("package"));
     }
 
     @Test
