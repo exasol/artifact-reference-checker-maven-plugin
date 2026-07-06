@@ -15,7 +15,6 @@ import com.exasol.errorreporting.ExaError;
  * This class gets the name of the jar file of a maven project.
  */
 class JarNameDetector {
-
     public static final Set<String> JAR_BUILDING_PLUGINS = Set.of("maven-assembly-plugin", "maven-shade-plugin");
 
     JarName getJarName(final MavenProject resolvedMavenProject) {

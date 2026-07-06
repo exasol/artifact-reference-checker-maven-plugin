@@ -26,24 +26,25 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
     @Parameter(property = "exclude")
     private List<String> excludes;
 
-    private final FileAndLineVisitor fileAndLineVisitor;
+    private FileAndLineVisitor fileAndLineVisitor;
 
     /**
      * Create a new instance of {@link AbstractArtifactReferenceCheckerMojo}.
      */
     protected AbstractArtifactReferenceCheckerMojo() {
-        this.fileAndLineVisitor = getFileAndLineVisitor();
+        // Intentionally empty.
     }
 
     /**
      * Get the visitor for processing the files.
-     * 
+     *
      * @return the visitor
      */
     protected abstract FileAndLineVisitor getFileAndLineVisitor();
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        this.fileAndLineVisitor = getFileAndLineVisitor(); // lazy initialization
         final JarNameDetector.JarName jarName = new JarNameDetector().getJarName(this.project);
         getLog().info("Detected artifact name: '" + jarName.getResolved() + "'");
         final String searchPattern = buildSearchPattern(jarName.getUnresolved());
@@ -54,7 +55,7 @@ public abstract class AbstractArtifactReferenceCheckerMojo extends AbstractMojo 
     }
 
     private String buildSearchPattern(final String unresolvedJarName) {
-        final Pattern variablePattern = Pattern.compile("\\$\\{([^}]*)\\}");
+        final Pattern variablePattern = Pattern.compile("\\$\\{([^}]*)}");
         final Matcher matcher = variablePattern.matcher(unresolvedJarName);
         return "\\Q" + matcher.replaceAll("\\\\E[-A-Za-z0-9_.]*?\\\\Q") + "\\E";
     }

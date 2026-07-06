@@ -3,8 +3,7 @@ package com.exasol.artifactreferencechecker;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,6 +83,12 @@ class ArtifactReferenceCheckerMojoIT {
     }
 
     @Test
+    void testVerifySucceedsAfterUnify() throws VerificationException {
+        runUnify();
+        assertDoesNotThrow(() -> this.verifier.executeGoal("package"));
+    }
+
+    @Test
     void testUnify() throws IOException, VerificationException {
         runUnify();
         final String fileContent = Files.readString(this.tempDir.resolve("nested/nested_invalid.md"));
@@ -106,6 +111,18 @@ class ArtifactReferenceCheckerMojoIT {
         runUnify();
         final String fileContent = Files.readString(this.tempDir.resolve("nested/excluded_invalid.md"));
         assertThat(fileContent, containsString("prefix-propval-middle-project-under-test--7.8.9.jar"));
+    }
+
+    @Test
+    void testUnifyFailsIfFileCannotBeModified() {
+        final Path readOnlyFile = this.tempDir.resolve("nested/nested_invalid.md");
+        if(!readOnlyFile.toFile().setWritable(false)) {
+            throw new AssertionError("Unable to create read only file required for triggering exception.");
+        }
+        final String message = assertThrows(VerificationException.class, this::runUnify).getMessage();
+        assertAll(//
+                () -> assertThat(message, containsString("Could not modify file")),
+                () -> assertThat(message, containsString(readOnlyFile.toString())));
     }
 
     private void runUnify() throws VerificationException {

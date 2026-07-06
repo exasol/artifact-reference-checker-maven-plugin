@@ -10,10 +10,16 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * This class checks the artifacts references in a maven project.
+ * This class checks the artifacts references in a maven project without correcting them.
  */
 @Mojo(name = "verify", defaultPhase = LifecyclePhase.PACKAGE)
 public class ArtifactReferenceCheckerVerifyMojo extends AbstractArtifactReferenceCheckerMojo {
+    /**
+     * Create a new instance of a {@link ArtifactReferenceCheckerVerifyMojo}.
+     */
+    public ArtifactReferenceCheckerVerifyMojo() {
+        super();
+    }
 
     @Override
     protected FileAndLineVisitor getFileAndLineVisitor() {

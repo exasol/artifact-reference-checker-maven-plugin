@@ -15,6 +15,12 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "unify")
 public class ArtifactReferenceCheckerUnifyMojo extends AbstractArtifactReferenceCheckerMojo {
+    /**
+     * Create a new instance of a {@link ArtifactReferenceCheckerUnifyMojo}.
+     */
+    public ArtifactReferenceCheckerUnifyMojo() {
+        super();
+    }
 
     @Override
     protected FileAndLineVisitor getFileAndLineVisitor() {
@@ -38,7 +44,7 @@ public class ArtifactReferenceCheckerUnifyMojo extends AbstractArtifactReference
                     writer.write(this.result.toString());
                     writer.flush();
                 } catch (final IOException exception) {
-                    throw new MojoExecutionException("Could not modify file " + file.toString(), exception);
+                    throw new MojoExecutionException("Could not modify file " + file, exception);
                 }
             }
         }
@@ -47,7 +53,8 @@ public class ArtifactReferenceCheckerUnifyMojo extends AbstractArtifactReference
         public void visitLine(final String line, final Pattern pattern, final String expected) {
             final Matcher matcher = pattern.matcher(line);
             final String replaced = matcher.replaceAll(expected);
-            this.result.append(replaced + System.lineSeparator());
+            this.result.append(replaced);
+            this.result.append(System.lineSeparator());
             if (!line.equals(replaced)) {
                 this.hadFileReplacements = true;
             }
