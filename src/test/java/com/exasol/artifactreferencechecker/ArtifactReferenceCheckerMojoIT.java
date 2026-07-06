@@ -108,6 +108,21 @@ class ArtifactReferenceCheckerMojoIT {
         assertThat(fileContent, containsString("prefix-propval-middle-project-under-test--7.8.9.jar"));
     }
 
+    @Test
+    void testUnifyFailsIfFileCannotBeModified() {
+        final Path readOnlyFile = this.tempDir.resolve("nested/nested_invalid.md");
+        if(readOnlyFile.toFile().setWritable(false)) {
+            final String message = assertThrows(VerificationException.class, this::runUnify).getMessage();
+            assertAll(//
+                    () -> assertThat(message, containsString("Could not modify file")),
+                    () -> assertThat(message, containsString(readOnlyFile.toString())));
+        }
+        else
+        {
+            throw new AssertionError("Unable to create read only file required for triggering exception.");
+        }
+    }
+
     private void runUnify() throws VerificationException {
         this.verifier.executeGoal("artifact-reference-checker:unify");
     }
